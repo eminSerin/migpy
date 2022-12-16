@@ -66,7 +66,7 @@ def create_slurm_script(
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task={cpu_per_task:d}
 #SBATCH --mem={mem_per_task:d}
-#SBATCH --array=1-{n_batches:d}
+#SBATCH --array=0-{n_batches:d}
 
 {python_exec:s} \\
     {migpy_func:s} \\
@@ -88,7 +88,7 @@ def create_slurm_script(
             task_time=task_time,
             cpu_per_task=cpu_per_task,
             mem_per_task=mem_per_task,
-            n_batches=n_batches,
+            n_batches=n_batches - 1,
             python_exec=sys.executable,
             batch_file=op.join(out_dir, "batches.json"),
             s=s,
