@@ -103,7 +103,12 @@ def create_slurm_script(
 @click.command()
 @click.argument("file_list", type=click.Path(exists=True))
 @click.argument("out_dir", type=click.Path(exists=True))
-@click.argument("dPCA_int", type=int)
+@click.option(
+    "--dPCA_int",
+    type=int,
+    default=4700,
+    help="Number of internal dimensions to reduce to.",
+)
 @click.option("--batch_size", type=int, default=8, help="Number of files in a batch.")
 @click.option(
     "--mem_per_task", type=int, default=16384, help="Memory to use for each task (mb)."
