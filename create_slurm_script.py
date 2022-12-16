@@ -138,12 +138,12 @@ def main(
     return create_slurm_script(
         file_list,
         out_dir,
+        mask,
         dPCA_int,
         batch_size,
         mem_per_task,
         cpu_per_task,
         task_time,
-        mask,
     )
 
 
