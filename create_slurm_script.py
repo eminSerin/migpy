@@ -74,7 +74,7 @@ def create_slurm_script(
     {out_dir:s} \\
     {s:d} \\
     {dPCA_int:d} \\
-    ${{{array_index_var}}}
+    ${{{array_index_var}}} \\ 
     --mask {mask:s}
 """
     if not op.exists(op.join(out_dir, "slurm.out")):
@@ -83,7 +83,7 @@ def create_slurm_script(
     for s, step in enumerate(batches.keys()):
         n_batches = len(list(batches[step].keys()))
         args = dict(
-            migpy_func=f"{os.path.join(__file__, 'migpy_cluster.py')}",
+            migpy_func=f"{os.path.join(op.dirname(__file__), 'migpy_cluster.py')}",
             array_index_var="SLURM_ARRAY_TASK_ID",
             task_time=task_time,
             cpu_per_task=cpu_per_task,
