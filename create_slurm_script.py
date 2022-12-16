@@ -7,7 +7,7 @@ import sys
 
 import click
 
-from pygica.migpy import get_batch
+from migpy import get_batch
 
 
 def create_slurm_script(
@@ -101,28 +101,24 @@ def create_slurm_script(
 
 
 @click.command()
-@click.argument(
-    "file_list", type=click.Path(exists=True), help="List of file paths to process."
+@click.argument("file_list", type=click.Path(exists=True))
+@click.argument("out_dir", type=click.Path(exists=True))
+@click.argument("dPCA_int", type=int)
+@click.option("--batch_size", type=int, default=8, help="Number of files in a batch.")
+@click.option(
+    "--mem_per_task", type=int, default=16384, help="Memory to use for each task (mb)."
 )
-@click.argument("out_dir", type=click.Path(exists=True), help="Output directory.")
-@click.argument(
-    "dPCA_int", type=int, help="Number of internal dimensions to reduce to."
-)
-@click.argument("batch_size", type=int, help="Number of files in a batch.")
-@click.argument(
-    "mem_per_task", type=int, help="Memory to use for each task (mb).", default=16384
-)
-@click.argument(
-    "cpu_per_task",
+@click.option(
+    "--cpu_per_task",
     type=int,
-    help="Number of cores to utilize for each task.",
     default=2,
+    help="Number of cores to utilize for each task.",
 )
-@click.argument(
-    "task_time", type=str, help="Time to run each task.", default="24:00:00"
+@click.option(
+    "--task_time", type=str, default="24:00:00", help="Time to run each task."
 )
-@click.argument(
-    "mask", type=click.Path(exists=True), default=None, help="Path to brain mask."
+@click.option(
+    "--mask", type=click.Path(exists=True), default=None, help="Path to brain mask."
 )
 def main(
     file_list,

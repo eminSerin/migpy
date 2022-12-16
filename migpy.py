@@ -28,7 +28,7 @@ from joblib import Parallel, delayed
 from scipy.sparse.linalg import eigsh
 from tqdm import tqdm
 
-from .utils import _assert_symmetric, _demean, _get_data, _merge_data, _var_normalize
+from utils import _assert_symmetric, _demean, _get_data, _merge_data, _var_normalize
 
 
 def _reduce_timecourse(A, dPCA_int, var_normalize=False, demean=False):

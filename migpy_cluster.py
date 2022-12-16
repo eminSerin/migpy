@@ -3,6 +3,7 @@ import os.path as op
 from collections import OrderedDict
 
 import click
+
 from migpy import migpy
 
 
@@ -32,11 +33,11 @@ def migpy_cluster(batch_file, out_dir, step, dPCA_int, batch_num, mask=None):
 
 
 @click.command()
-@click.argument("batch_file", type=click.Path(exists=True), help="Batch file.")
-@click.argument("out_dir", type=click.Path(exists=True), help="Output directory.")
-@click.argument("step", type=int, help="Step number.")
-@click.argument("dPCA_int", type=int, help="Number of internal dimensions to reduce to")
-@click.argument("batch_num", type=int, help="Batch number.")
+@click.argument("batch_file", type=click.Path(exists=True))
+@click.argument("out_dir", type=click.Path(exists=True))
+@click.argument("step", type=int)
+@click.argument("dPCA_int", type=int)
+@click.argument("batch_num", type=int)
 @click.option(
     "--mask", type=click.Path(exists=True), help="Path to mask file.", default=None
 )
