@@ -70,12 +70,12 @@ def create_slurm_script(
 
 {python_exec:s} \\
     {migpy_func:s} \\
-    {batch_file:s} \\
-    {out_dir:s} \\
-    {s:d} \\
-    {dPCA_int:d} \\
-    ${{{array_index_var}}} \\ 
-    --mask {mask:s}
+    --batch_file={batch_file:s} \\
+    --out_dir={out_dir:s} \\
+    --mask={mask:s} \\ 
+    --step={s:d} \\
+    --dpca_int={dPCA_int:d} \\
+    --batch_num=${{{array_index_var}}}
 """
     if not op.exists(op.join(out_dir, "slurm.out")):
         os.makedirs(op.join(out_dir, "slurm.out"))
@@ -103,8 +103,15 @@ def create_slurm_script(
 
 
 @click.command()
-@click.argument("file_list", type=click.Path(exists=True))
-@click.argument("out_dir", type=click.Path(exists=True))
+@click.option(
+    "--file_list",
+    type=click.Path(exists=True),
+    required=True,
+    help="List of file paths.",
+)
+@click.option(
+    "--out_dir", type=click.Path(exists=True), required=True, help="Output directory."
+)
 @click.option(
     "--dPCA_int",
     type=int,
