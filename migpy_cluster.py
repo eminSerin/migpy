@@ -19,6 +19,10 @@ def migpy_cluster(batch_file, out_dir, step, dPCA_int, batch_num, mask=None):
     if not op.exists(batch_file):
         raise FileNotFoundError("Batch file does not exist.")
 
+    if mask is not None:
+        if not op.exists(mask):
+            raise FileNotFoundError("Mask file does not exist.")
+
     batches = json.load(open(batch_file, "r"), object_pairs_hook=OrderedDict)
 
     input_files = batches[f"step_{step}"][f"s{step}_migpy_batch_{batch_num}"]
@@ -33,14 +37,12 @@ def migpy_cluster(batch_file, out_dir, step, dPCA_int, batch_num, mask=None):
 
 
 @click.command()
-@click.argument("batch_file", type=click.Path(exists=True))
-@click.argument("out_dir", type=click.Path(exists=True))
+@click.argument("batch_file", type=click.Path())
+@click.argument("out_dir", type=click.Path())
 @click.argument("step", type=int)
 @click.argument("dPCA_int", type=int)
 @click.argument("batch_num", type=int)
-@click.option(
-    "--mask", type=click.Path(exists=True), help="Path to mask file.", default=None
-)
+@click.option("--mask", type=click.Path(), help="Path to mask file.", default=None)
 def main(batch_file, out_dir, step, dpca_int, batch_num, mask):
     if mask == "":
         mask = None

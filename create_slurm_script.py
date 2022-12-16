@@ -59,24 +59,25 @@ def create_slurm_script(
     batches = get_batch(file_list, batch_size, out_dir)
 
     slurm_config = """
-    #!/bin/bash
+#!/bin/bash
     
-    #SBATCH --job-name=migpy
-    #SBATCH --time={task_time:s}
-    #SBATCH --ntasks=1
-    #SBATCH --cpus-per-task={cpu_per_task:d}
-    #SBATCH --mem={mem_per_task:d}
-    #SBATCH --array=1-{n_batches:d}
+#SBATCH --job-name=migpy
+#SBATCH --output={out_dir:s}/migpy_%j.out
+#SBATCH --time={task_time:s}
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task={cpu_per_task:d}
+#SBATCH --mem={mem_per_task:d}
+#SBATCH --array=1-{n_batches:d}
 
-    {python_exec:s} \\
-        {migpy_func:s} \\
-        {batch_file:s} \\
-        {out_dir:s} \\
-        {s:d} \\
-        {dPCA_int:d} \\
-        ${{{array_index_var}}}
-        --mask {mask:s}
-    """
+{python_exec:s} \\
+    {migpy_func:s} \\
+    {batch_file:s} \\
+    {out_dir:s} \\
+    {s:d} \\
+    {dPCA_int:d} \\
+    ${{{array_index_var}}}
+    --mask {mask:s}
+"""
 
     for s, step in enumerate(batches.keys()):
         n_batches = len(list(batches[step].keys()))
