@@ -45,3 +45,7 @@ def main(batch_file, out_dir, step, dPCA_int, batch_num, mask):
     if mask == "":
         mask = None
     return migpy_cluster(batch_file, out_dir, step, mask, dPCA_int, batch_num)
+
+
+if __name__ == "__main__":
+    main()

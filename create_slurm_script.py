@@ -140,3 +140,7 @@ def main(
         task_time,
         mask,
     )
+
+
+if __name__ == "__main__":
+    main()
