@@ -41,10 +41,10 @@ def migpy_cluster(batch_file, out_dir, step, dPCA_int, batch_num, mask=None):
 @click.option(
     "--mask", type=click.Path(exists=True), help="Path to mask file.", default=None
 )
-def main(batch_file, out_dir, step, dPCA_int, batch_num, mask):
+def main(batch_file, out_dir, step, dpca_int, batch_num, mask):
     if mask == "":
         mask = None
-    return migpy_cluster(batch_file, out_dir, step, mask, dPCA_int, batch_num)
+    return migpy_cluster(batch_file, out_dir, step, mask, dpca_int, batch_num)
 
 
 if __name__ == "__main__":

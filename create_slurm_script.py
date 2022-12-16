@@ -128,7 +128,7 @@ def create_slurm_script(
 def main(
     file_list,
     out_dir,
-    dPCA_int,
+    dpca_int,
     batch_size,
     mem_per_task,
     cpu_per_task,
@@ -139,7 +139,7 @@ def main(
         file_list,
         out_dir,
         mask,
-        dPCA_int,
+        dpca_int,
         batch_size,
         mem_per_task,
         cpu_per_task,
