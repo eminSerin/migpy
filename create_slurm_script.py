@@ -58,11 +58,10 @@ def create_slurm_script(
 
     batches = get_batch(file_list, batch_size, out_dir)
 
-    slurm_config = """
-#!/bin/bash
+    slurm_config = """#!/bin/bash
     
 #SBATCH --job-name=migpy
-#SBATCH --output={out_dir:s}/migpy_%j.out
+#SBATCH --output={out_dir:s}/slurm.out/migpy_%j.out
 #SBATCH --time={task_time:s}
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task={cpu_per_task:d}
@@ -78,18 +77,20 @@ def create_slurm_script(
     ${{{array_index_var}}}
     --mask {mask:s}
 """
+    if not op.exists(op.join(out_dir, "slurm.out")):
+        os.makedirs(op.join(out_dir, "slurm.out"))
 
     for s, step in enumerate(batches.keys()):
         n_batches = len(list(batches[step].keys()))
         args = dict(
-            migpy_func=f"{os.path.join(os.getcwd(), 'migpy_cluster.py')}",
+            migpy_func=f"{os.path.join(__file__, 'migpy_cluster.py')}",
             array_index_var="SLURM_ARRAY_TASK_ID",
             task_time=task_time,
             cpu_per_task=cpu_per_task,
             mem_per_task=mem_per_task,
             n_batches=n_batches,
             python_exec=sys.executable,
-            batch_file=op.join(out_dir, "batches", "batches.json"),
+            batch_file=op.join(out_dir, "batches.json"),
             s=s,
             out_dir=out_dir,
             mask=mask,
