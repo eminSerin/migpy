@@ -72,7 +72,7 @@ def create_slurm_script(
     {migpy_func:s} \\
     --batch_file={batch_file:s} \\
     --out_dir={out_dir:s} \\
-    --mask={mask:s} \\ 
+    --mask={mask:s} \\
     --step={s:d} \\
     --dpca_int={dPCA_int:d} \\
     --batch_num=${{{array_index_var}}}

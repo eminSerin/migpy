@@ -57,7 +57,12 @@ def _get_data(img, mask=None):
     """Get data from image.
     Returns (ts x voxel/vertex) array."""
     if isinstance(img, str):
-        img = nib.load(img)
+        if img.endswith((".nii.gz", ".nii", ".func.gii", ".dtseries.nii")):
+            img = nib.load(img)
+        elif img.endswith(".npy"):
+            img = np.load(img)
+        else:
+            raise ValueError("Input file type is not supported.")
 
     if isinstance(img, np.ndarray):
         return img

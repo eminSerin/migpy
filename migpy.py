@@ -104,12 +104,13 @@ def merge_migpy(migp_files, out_dir, dPCA_int=4700, dPCA_out=None):
 
     print("Merging MIGP files...")
     for i, migp_file in tqdm(enumerate(migp_files)):
+        data = _get_data(migp_file)
         if i == 0:
-            W = _reduce_timecourse(migp_file, dPCA_int)
+            W = _reduce_timecourse(data, dPCA_int)
         else:
-            W = _merge_data([W, migp_file])
+            W = _merge_data([W, data])
             W = _reduce_timecourse(W, dPCA_int)
-    W = W[: dPCA_out - 1, :]
+    W = W[:dPCA_out, :]
     print("Saving MIGP...")
     np.save(op.join(out_dir, f"migp_dPCA{dPCA_out}.npy"), W)
 
@@ -117,7 +118,7 @@ def merge_migpy(migp_files, out_dir, dPCA_int=4700, dPCA_out=None):
 def migpy(
     img_list,
     out_dir,
-    step,
+    step=None,
     mask=None,
     dPCA_int=4700,
     batch_num=None,
@@ -207,9 +208,9 @@ def migpy(
     if verbose:
         print("Saving MIGP...")
     if batch_num is not None:
-        out_file = op.join(batch_dir, f"migpy_batch_{batch_num}.npy")
+        out_file = op.join(batch_dir, f"s{step}_migpy_batch_{batch_num}.npy")
     else:
-        out_file = op.join(batch_dir, "migpy.npy")
+        out_file = op.join(batch_dir, f"s{step}_migpy.npy")
     np.save(out_file, W)
 
 
@@ -263,8 +264,15 @@ def get_batch(file_list, batch_size, work_dir):
     n_sub = len(file_list)
     while batch_size < n_sub:
         tmp_chunk = OrderedDict()
-        for i, x in enumerate(range(0, len(file_list), batch_size)):
-            tmp_chunk[f"s{step}_migpy_batch_{i}"] = file_list[x : x + batch_size]
+        if step == 0:
+            for i, x in enumerate(range(0, len(file_list), batch_size)):
+                tmp_chunk[f"s{step}_migpy_batch_{i}"] = file_list[x : x + batch_size]
+        else:
+            for i, x in enumerate(range(0, len(file_list), batch_size)):
+                tmp_chunk[f"s{step}_migpy_batch_{i}"] = [
+                    op.join(op.dirname(f), "batches", op.basename(f) + ".npy")
+                    for f in file_list[x : x + batch_size]
+                ]
         batches[f"step_{step}"] = tmp_chunk
         step += 1
         file_list = [op.join(work_dir, x) for x in list(tmp_chunk.keys())]
